@@ -31,416 +31,436 @@
 <body class="min-h-screen">
   <div id="root"></div>
 
-  <script type="text/babel">
-    const { useState, useEffect } = React;
+<script type="text/babel">
+  const { useState, useEffect } = React;
 
-    const App = () => {
-      const [selectedParcel, setSelectedParcel] = useState(null);
-      const [showBooking, setShowBooking] = useState(false);
-      const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        parcel: "",
-        package: "",
-      });
+  const App = () => {
+    const [selectedParcel, setSelectedParcel] = useState(null);
+    const [showBooking, setShowBooking] = useState(false);
+    const [formData, setFormData] = useState({
+      name: "",
+      email: "",
+      parcel: "",
+      package: "",
+    });
 
-      const parcels = [
-        { id: 1, type: "Wald", price: "49", size: "50x50", available: true, image: "https://images.unsplash.com/photo-1447752814277-968806a01c79?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-        { id: 2, type: "Strand", price: "59", size: "60x40", available: true, image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-        { id: 3, type: "Sternenhimmel", price: "69", size: "55x45", available: false, image: "https://images.unsplash.com/photo-1536130710391-92f47f1a7edc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-        { id: 4, type: "Berg", price: "54", size: "50x50", available: true, image: "https://images.unsplash.com/photo-1444892627154-2487e213e564?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-      ];
+    const parcels = [
+      { id: 1, type: "Wald", price: "49", size: "50x50", available: true, image: "https://images.unsplash.com/photo-1447752814277-968806a01c79?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
+      { id: 2, type: "Strand", price: "59", size: "60x40", available: true, image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
+      { id: 3, type: "Sternenhimmel", price: "69", size: "55x45", available: false, image: "https://images.unsplash.com/photo-1536130710391-92f47f1a7edc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
+      { id: 4, type: "Berg", price: "54", size: "50x50", available: true, image: "https://images.unsplash.com/photo-1444892627154-2487e213e564?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
+    ];
 
-      const packages = [
-        {
-          title: "Meditationshaus",
-          description: "Ruhige Atmosphäre mit sanften Klängen und Naturblick.",
-          price: "99",
-          type: "one-time",
-          image: "https://images.unsplash.com/photo-1583392645293-35be201eace2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-          icon: "🧘",
+    const packages = [
+      {
+        title: "Meditationshaus",
+        description: "Ruhige Atmosphäre mit sanften Klängen und Naturblick.",
+        price: "99",
+        type: "one-time",
+        image: "https://images.unsplash.com/photo-1583392645293-35be201eace2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        icon: "🧘",
+      },
+      {
+        title: "Massage-Lounge",
+        description: "Entspannende Umgebung für Körperarbeit und Wellness.",
+        price: "29",
+        type: "monthly",
+        image: "https://images.unsplash.com/photo-1544148103-27249b4e0aaa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        icon: "💆",
+      },
+      {
+        title: "Astrologie-Observatorium",
+        description: "Sternenhimmel für kosmische Energiearbeit.",
+        price: "129",
+        type: "one-time",
+        image: "https://images.unsplash.com/photo-1585074360847-68b77a3cc9f2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        icon: "🔭",
+      },
+    ];
+
+    const events = [
+      { title: "Morgenmeditation", date: "15. Juli 2024", time: "07:00 Uhr", type: "Meditation" },
+      { title: "Chakren-Ausgleich", date: "18. Juli 2024", time: "19:30 Uhr", type: "Heilung" },
+      { title: "Astro-Workshop: Mondphasen", date: "22. Juli 2024", time: "20:00 Uhr", type: "Workshop" },
+      { title: "Klangschalen-Yoga", date: "25. Juli 2024", time: "18:00 Uhr", type: "Yoga" },
+    ];
+
+    const handleParcelClick = (parcel) => {
+      setSelectedParcel(parcel);
+      setFormData({ ...formData, parcel: parcel.type });
+      setShowBooking(false);
+    };
+
+    const handleBookNow = () => {
+      if (selectedParcel) {
+        setShowBooking(true);
+      }
+    };
+
+    const handleSubmitBooking = (e) => {
+      e.preventDefault();
+      alert("Buchung erfolgreich! Wir werden uns mit Zahlungsinformationen bei Ihnen melden.");
+      setShowBooking(false);
+      setSelectedParcel(null);
+    };
+
+    const handleInputChange = (e) => {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    useEffect(() => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("animate-fade-in");
+            }
+          });
         },
-        {
-          title: "Massage-Lounge",
-          description: "Entspannende Umgebung für Körperarbeit und Wellness.",
-          price: "29",
-          type: "monthly",
-          image: "https://images.unsplash.com/photo-1544148103-27249b4e0aaa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-          icon: "💆",
-        },
-        {
-          title: "Astrologie-Observatorium",
-          description: "Sternenhimmel für kosmische Energiearbeit.",
-          price: "129",
-          type: "one-time",
-          image: "https://images.unsplash.com/photo-1585074360847-68b77a3cc9f2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-          icon: "🔭",
-        },
-      ];
+        { threshold: 0.1 }
+      );
 
-      const events = [
-        { title: "Morgenmeditation", date: "15. Juli 2024", time: "07:00 Uhr", type: "Meditation" },
-        { title: "Chakren-Ausgleich", date: "18. Juli 2024", time: "19:30 Uhr", type: "Heilung" },
-        { title: "Astro-Workshop: Mondphasen", date: "22. Juli 2024", time: "20:00 Uhr", type: "Workshop" },
-        { title: "Klangschalen-Yoga", date: "25. Juli 2024", time: "18:00 Uhr", type: "Yoga" },
-      ];
+      const elements = document.querySelectorAll(".fade-element");
+      elements.forEach(el => observer.observe(el));
 
-      const handleParcelClick = (parcel) => {
-        setSelectedParcel(parcel);
-        setFormData({ ...formData, parcel: parcel.type });
-        setShowBooking(false);
-      };
+      return () => observer.disconnect();
+    }, []);
 
-      const handleBookNow = () => {
-        if (selectedParcel) {
-          setShowBooking(true);
-        }
-      };
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-amber-50 via-green-50 to-blue-50 text-gray-800">
+        <header className="relative h-96 md:h-[500px] overflow-hidden">
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: "url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')"
+            }}
+          ></div>
+          <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+          <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">
+              Willkommen in der Energetiker-Welt
+            </h1>
+            <p className="text-xl md:text-2xl text-yellow-100 mb-8 drop-shadow">
+              Dein virtueller Raum für Heilung, Energie und Begegnung.
+            </p>
+            <button 
+              onClick={() => document.getElementById('map-section').scrollIntoView({ behavior: 'smooth' })}
+              className="bg-gradient-to-r from-green-500 to-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-green-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
+            >
+              Jetzt Land sichern
+            </button>
+          </div>
+        </header>
 
-      const handleSubmitBooking = (e) => {
-        e.preventDefault();
-        alert("Buchung erfolgreich! Wir werden uns mit Zahlungsinformationen bei Ihnen melden.");
-        setShowBooking(false);
-        setSelectedParcel(null);
-      };
-
-      const handleInputChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-      };
-
-      useEffect(() => {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add("animate-fade-in");
-              }
-            });
-          },
-          { threshold: 0.1 }
-        );
-
-        document.querySelectorAll(".fade-element").forEach((el) => observer.observe(el));
-
-        return () => observer.disconnect();
-      }, []);
-
-      return (
-        <div className="min-h-screen bg-gradient-to-b from-amber-50 via-green-50 to-blue-50 text-gray-800">
-          <!-- Header mit echtem Sonnenaufgangs-Bild -->
-          <header className="relative h-96 md:h-[500px] overflow-hidden">
-            <div 
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{
-                backgroundImage: "url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')"
-              }}
-            ></div>
-            <div className="absolute inset-0 bg-black bg-opacity-30"></div>
-            <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-              <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">
-                Willkommen in der Energetiker-Welt
-              </h1>
-              <p className="text-xl md:text-2xl text-yellow-100 mb-8 drop-shadow">
-                Dein virtueller Raum für Heilung, Energie und Begegnung.
-              </p>
-              <button 
-                onClick={() => document.getElementById('map-section').scrollIntoView({ behavior: 'smooth' })}
-                className="bg-gradient-to-r from-green-500 to-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-green-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
-              >
-                Jetzt Land sichern
-              </button>
-            </div>
-          </header>
-
-          <main>
-            <!-- Willkommensbereich -->
-            <section className="py-16 px-6 max-w-6xl mx-auto">
-              <div className="bg-white bg-opacity-80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-green-100">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 text-gray-800">
-                  Dein Platz im virtuellen Reich
-                </h2>
-                <p className="text-lg text-center mb-8 text-gray-700 leading-relaxed max-w-4xl mx-auto">
-                  In unserer einzigartigen 3D-Welt kaufen oder mieten Energetiker ihre eigene Parzelle, gestalten Themenhäuser und bieten dort Sitzungen an – von Meditation über Massage bis Astrologie.
-                </p>
-              </div>
-            </section>
-
-            <!-- Interaktive Karte -->
-            <section id="map-section" className="py-16 px-6 bg-white bg-opacity-40">
-              <div className="max-w-6xl mx-auto">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 text-gray-800 fade-element">
-                  Wähle dein Land
-                </h2>
-                <p className="text-center text-lg text-gray-700 mb-4 fade-element">
-                  Parzellen sind limitiert – sichere dir deinen Platz in der virtuellen Welt!
-                </p>
-                <p className="text-center text-lg text-blue-600 font-medium fade-element mb-8">
-                  ➡️ Klicke auf eine Parzelle, um mehr zu sehen
-                </p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                  {parcels.map((parcel) => (
-                    <div 
-                      key={parcel.id}
-                      onClick={() => handleParcelClick(parcel)}
-                      className={`fade-element cursor-pointer rounded-xl overflow-hidden shadow-lg transform hover:scale-105 transition-all duration-300 ${
-                        parcel.available ? "hover:shadow-2xl" : "opacity-60 cursor-not-allowed"
-                      }`}
-                    >
-                      <img 
-                        src={parcel.image} 
-                        alt={parcel.type} 
-                        className="w-full h-48 object-cover"
-                      />
-                      <div className="p-6 bg-white">
-                        <h3 className="text-xl font-bold text-gray-800 mb-2">{parcel.type}</h3>
-                        <p className="text-gray-600 mb-3">Größe: {parcel.size}</p>
-                        <p className="text-2xl font-bold text-green-600 mb-4">
-                          €{parcel.price}
-                        </p>
-                        <button 
-                          className={`w-full py-2 rounded-lg font-semibold transition-colors ${
-                            parcel.available 
-                              ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700" 
-                              : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                          }`}
-                          disabled={!parcel.available}
-                        >
-                          {parcel.available ? "Auswählen" : "Vergaben"}
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Parzelle ausgewählt → Detailansicht */}
-                {selectedParcel && (
-                  <div className="fade-element mt-8 bg-white rounded-2xl p-8 shadow-2xl border border-green-200 max-w-4xl mx-auto">
-                    <div className="grid md:grid-cols-2 gap-8">
-                      <div>
-                        <h3 className="text-2xl font-bold mb-4 text-gray-800">
-                          Parzelle: {selectedParcel.type}
-                        </h3>
-                        <img 
-                          src={selectedParcel.image} 
-                          alt={selectedParcel.type} 
-                          className="w-full h-48 object-cover rounded-lg mb-4"
-                        />
-                        <p className="text-gray-700 mb-2"><strong>Größe:</strong> {selectedParcel.size}</p>
-                        <p className="text-gray-700 mb-2"><strong>Preis:</strong> €{selectedParcel.price}</p>
-                        <p className="text-gray-700 mb-6">
-                          Ein idealer Ort für deine energetische Arbeit in der virtuellen Welt.
-                        </p>
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold mb-4 text-gray-800">Wähle dein Themenhaus</h4>
-                        <select 
-                          name="package"
-                          value={formData.package}
-                          onChange={handleInputChange}
-                          className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        >
-                          <option value="">Wähle ein Paket...</option>
-                          {packages.map((pkg) => (
-                            <option key={pkg.title} value={pkg.title}>
-                              {pkg.title} (€{pkg.price} {pkg.type === 'monthly' ? '/ Monat' : ''})
-                            </option>
-                          ))}
-                        </select>
-                        {!showBooking ? (
-                          <button 
-                            onClick={handleBookNow}
-                            className="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-green-600 hover:to-blue-700 transition-all duration-300"
-                          >
-                            Buchen & Bezahlen
-                          </button>
-                        ) : (
-                          <form onSubmit={handleSubmitBooking} className="space-y-4">
-                            <input 
-                              type="text"
-                              name="name"
-                              placeholder="Dein Name"
-                              value={formData.name}
-                              onChange={handleInputChange}
-                              required
-                              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-                            />
-                            <input 
-                              type="email"
-                              name="email"
-                              placeholder="Deine E-Mail"
-                              value={formData.email}
-                              onChange={handleInputChange}
-                              required
-                              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-                            />
-                            <p className="text-sm text-gray-600">
-                              Wir senden dir ein Zahlungslink per E-Mail (Stripe/PayPal).
-                            </p>
-                            <button 
-                              type="submit"
-                              className="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-green-600 hover:to-blue-700 transition-all duration-300"
-                            >
-                              Buchung bestätigen
-                            </button>
-                          </form>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </section>
-
-            <!-- Themenhäuser -->
-            <section className="py-16 px-6 max-w-6xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 fade-element">
-                Pakete & Themenhäuser
+        <main>
+          <section className="py-16 px-6 max-w-6xl mx-auto">
+            <div className="bg-white bg-opacity-80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-green-100">
+              <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 text-gray-800 fade-element">
+                Dein Platz im virtuellen Reich
               </h2>
-              <div className="grid md:grid-cols-3 gap-8">
-                {packages.map((pkg, index) => (
+              <p className="text-lg text-center mb-8 text-gray-700 leading-relaxed max-w-4xl mx-auto">
+                In unserer einzigartigen 3D-Welt kaufen oder mieten Energetiker ihre eigene Parzelle, gestalten Themenhäuser und bieten dort Sitzungen an – von Meditation über Massage bis Astrologie.
+              </p>
+            </div>
+          </section>
+
+          <section id="map-section" className="py-16 px-6 bg-white bg-opacity-40">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 text-gray-800 fade-element">
+                Wähle dein Land
+              </h2>
+              <p className="text-center text-lg text-gray-700 mb-4 fade-element">
+                Parzellen sind limitiert – sichere dir deinen Platz in der virtuellen Welt!
+              </p>
+              <p className="text-center text-lg text-blue-600 font-medium fade-element mb-8">
+                ➡️ Klicke auf eine Parzelle, um mehr zu sehen
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                {parcels.map((parcel) => (
                   <div 
-                    key={index}
-                    className="fade-element bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                    key={parcel.id}
+                    onClick={() => handleParcelClick(parcel)}
+                    className={`fade-element cursor-pointer rounded-xl overflow-hidden shadow-lg transform hover:scale-105 transition-all duration-300 ${
+                      parcel.available ? "hover:shadow-2xl" : "opacity-60 cursor-not-allowed"
+                    }`}
                   >
-                    <div className="relative">
-                      <img 
-                        src={pkg.image} 
-                        alt={pkg.title} 
-                        className="w-full h-48 object-cover"
-                      />
-                      <div className="absolute top-4 right-4 bg-white bg-opacity-90 rounded-full w-12 h-12 flex items-center justify-center text-2xl">
-                        {pkg.icon}
-                      </div>
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold text-gray-800 mb-3">{pkg.title}</h3>
-                      <p className="text-gray-700 mb-4 leading-relaxed">{pkg.description}</p>
-                      <div className="flex justify-between items-center">
-                        <span className="text-2xl font-bold text-green-600">
-                          €{pkg.price}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {pkg.type === 'monthly' ? '/ Monat' : 'einmalig'}
-                        </span>
-                      </div>
+                    <img 
+                      src={parcel.image} 
+                      alt={parcel.type} 
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="p-6 bg-white">
+                      <h3 className="text-xl font-bold text-gray-800 mb-2">{parcel.type}</h3>
+                      <p className="text-gray-600 mb-3">Größe: {parcel.size}</p>
+                      <p className="text-2xl font-bold text-green-600 mb-4">
+                        €{parcel.price}
+                      </p>
+                      <button 
+                        className={`w-full py-2 rounded-lg font-semibold transition-colors ${
+                          parcel.available 
+                            ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700" 
+                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}
+                        disabled={!parcel.available}
+                      >
+                        {parcel.available ? "Auswählen" : "Vergaben"}
+                      </button>
                     </div>
                   </div>
                 ))}
               </div>
-            </section>
 
-            <!-- So funktioniert's -->
-            <section className="py-16 px-6 bg-white bg-opacity-40">
-              <div className="max-w-4xl mx-auto">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 fade-element">
-                  So funktioniert's
-                </h2>
-                <div className="grid md:grid-cols-3 gap-8">
-                  {[
-                    { step: 1, title: "Land auswählen", desc: "Wähle deine Parzelle auf der interaktiven Karte – Wald, Strand oder Sternenhimmel.", icon: "🗺️" },
-                    { step: 2, title: "Haus-Paket wählen", desc: "Entscheide dich für ein Themenhaus oder gestalte deinen Raum individuell.", icon: "🏠" },
-                    { step: 3, title: "Kunden empfangen", desc: "Biete Sitzungen an und empfange deine Klienten in deinem virtuellen Energetiker-Raum.", icon: "👥" }
-                  ].map((item) => (
-                    <div 
-                      key={item.step}
-                      className="fade-element text-center bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300"
-                    >
-                      <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                        {item.step}
-                      </div>
-                      <div className="text-4xl mb-4">{item.icon}</div>
-                      <h3 className="text-xl font-bold text-gray-800 mb-3">{item.title}</h3>
-                      <p className="text-gray-700">{item.desc}</p>
+              {selectedParcel && (
+                <div className="fade-element mt-8 bg-white rounded-2xl p-8 shadow-2xl border border-green-200 max-w-4xl mx-auto">
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div>
+                      <h3 className="text-2xl font-bold mb-4 text-gray-800">
+                        Parzelle: {selectedParcel.type}
+                      </h3>
+                      <img 
+                        src={selectedParcel.image} 
+                        alt={selectedParcel.type} 
+                        className="w-full h-48 object-cover rounded-lg mb-4"
+                      />
+                      <p className="text-gray-700 mb-2"><strong>Größe:</strong> {selectedParcel.size}</p>
+                      <p className="text-gray-700 mb-2"><strong>Preis:</strong> €{selectedParcel.price}</p>
+                      <p className="text-gray-700 mb-6">
+                        Ein idealer Ort für deine energetische Arbeit in der virtuellen Welt.
+                      </p>
                     </div>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            <!-- Events -->
-            <section className="py-16 px-6 max-w-6xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 fade-element">
-                Nächste Events
-              </h2>
-              <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="bg-gradient-to-r from-green-100 to-blue-100">
-                        <th className="py-4 px-6 text-left font-bold text-gray-800">Veranstaltung</th>
-                        <th className="py-4 px-6 text-left font-bold text-gray-800">Datum</th>
-                        <th className="py-4 px-6 text-left font-bold text-gray-800">Uhrzeit</th>
-                        <th className="py-4 px-6 text-left font-bold text-gray-800">Typ</th>
-                        <th className="py-4 px-6 text-left font-bold text-gray-800">Aktion</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {events.map((event, index) => (
-                        <tr key={index} className="border-t border-gray-200 hover:bg-gray-50 transition-colors">
-                          <td className="py-4 px-6 font-medium text-gray-800">{event.title}</td>
-                          <td className="py-4 px-6 text-gray-700">{event.date}</td>
-                          <td className="py-4 px-6 text-gray-700">{event.time}</td>
-                          <td className="py-4 px-6">
-                            <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                              {event.type}
-                            </span>
-                          </td>
-                          <td className="py-4 px-6">
-                            <button className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-600 transition-colors">
-                              Buchen
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </section>
-
-            <!-- Über uns -->
-            <section className="py-16 px-6 bg-white bg-opacity-40">
-              <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-                <div className="fade-element">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-800">Über uns</h2>
-                  <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                    Unsere Vision ist es, Energetikern eine einzigartige Plattform zu bieten, auf der sie ihre Arbeit in einer immersiven, virtuellen Umgebung entfalten können. 
-                    Wir glauben an die Kraft der Energiearbeit – unabhängig vom physischen Standort.
-                  </p>
-                  <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                    Warum virtuelle Räume? Weil sie Barrieren abbauen, Reichweite schaffen und eine neue Dimension der energetischen Begegnung ermöglichen – jederzeit, überall.
-                  </p>
-                  <p className="text-lg text-gray-700 leading-relaxed">
-                    Gegründet aus der Überzeugung, dass spirituelle Arbeit in die digitale Welt gehört – respektvoll, ästhetisch und wirkungsvoll.
-                  </p>
-                </div>
-                <div className="fade-element">
-                  <div className="bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-300">
-                    <img 
-                      src="https://images.unsplash.com/photo-1594736798357-8ec5ad490f7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
-                      alt="Gründer" 
-                      className="w-full h-auto"
-                    />
+                    <div>
+                      <h4 className="text-xl font-bold mb-4 text-gray-800">Wähle dein Themenhaus</h4>
+                      <select 
+                        name="package"
+                        value={formData.package}
+                        onChange={handleInputChange}
+                        className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      >
+                        <option value="">Wähle ein Paket...</option>
+                        {packages.map((pkg) => (
+                          <option key={pkg.title} value={pkg.title}>
+                            {pkg.title} (€{pkg.price} {pkg.type === 'monthly' ? '/ Monat' : ''})
+                          </option>
+                        ))}
+                      </select>
+                      {!showBooking ? (
+                        <button 
+                          onClick={handleBookNow}
+                          className="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-green-600 hover:to-blue-700 transition-all duration-300"
+                        >
+                          Buchen & Bezahlen
+                        </button>
+                      ) : (
+                        <form onSubmit={handleSubmitBooking} className="space-y-4">
+                          <input 
+                            type="text"
+                            name="name"
+                            placeholder="Dein Name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                          />
+                          <input 
+                            type="email"
+                            name="email"
+                            placeholder="Deine E-Mail"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                          />
+                          <p className="text-sm text-gray-600">
+                            Wir senden dir ein Zahlungslink per E-Mail (Stripe/PayPal).
+                          </p>
+                          <button 
+                            type="submit"
+                            className="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-green-600 hover:to-blue-700 transition-all duration-300"
+                          >
+                            Buchung bestätigen
+                          </button>
+                        </form>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </section>
+              )}
+            </div>
+          </section>
 
-            <!-- Kontakt & Login -->
-            <section className="py-16 px-6 max-w-4xl mx-auto">
-              <div className="grid md:grid-cols-2 gap-12">
-                <div className="fade-element">
-                  <h2 className="text-3xl font-bold mb-6 text-gray-800">Kontakt</h2>
-                  <form className="space-y-6">
-                    <div>
-                      <label className="block text-gray-700 font-medium mb-2">Name</label>
-                      <input 
-                        type="text" 
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        placeholder="Dein Name"
-                      />
+          <section className="py-16 px-6 max-w-6xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 fade-element">
+              Pakete & Themenhäuser
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              {packages.map((pkg, index) => (
+                <div 
+                  key={index}
+                  className="fade-element bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                >
+                  <div className="relative">
+                    <img 
+                      src={pkg.image} 
+                      alt={pkg.title} 
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="absolute top-4 right-4 bg-white bg-opacity-90 rounded-full w-12 h-12 flex items-center justify-center text-2xl">
+                      {pkg.icon}
                     </div>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-gray-800 mb-3">{pkg.title}</h3>
+                    <p className="text-gray-700 mb-4 leading-relaxed">{pkg.description}</p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-2xl font-bold text-green-600">
+                        €{pkg.price}
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        {pkg.type === 'monthly' ? '/ Monat' : 'einmalig'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="py-16 px-6 bg-white bg-opacity-40">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 fade-element">
+                So funktioniert's
+              </h2>
+              <div className="grid md:grid-cols-3 gap-8">
+                {[{ step: 1, title: "Land auswählen", desc: "Wähle deine Parzelle auf der interaktiven Karte – Wald, Strand oder Sternenhimmel.", icon: "🗺️" },
+                  { step: 2, title: "Haus-Paket wählen", desc: "Entscheide dich für ein Themenhaus oder gestalte deinen Raum individuell.", icon: "🏠" },
+                  { step: 3, title: "Kunden empfangen", desc: "Biete Sitzungen an und empfange deine Klienten in deinem virtuellen Energetiker-Raum.", icon: "👥" }
+                ].map((item) => (
+                  <div 
+                    key={item.step}
+                    className="fade-element text-center bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300"
+                  >
+                    <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+                      {item.step}
+                    </div>
+                    <div className="text-4xl mb-4">{item.icon}</div>
+                    <h3 className="text-xl font-bold text-gray-800 mb-3">{item.title}</h3>
+                    <p className="text-gray-700">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section className="py-16 px-6 max-w-6xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 fade-element">
+              Nächste Events
+            </h2>
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-gradient-to-r from-green-100 to-blue-100">
+                      <th className="py-4 px-6 text-left font-bold text-gray-800">Veranstaltung</th>
+                      <th className="py-4 px-6 text-left font-bold text-gray-800">Datum</th>
+                      <th className="py-4 px-6 text-left font-bold text-gray-800">Uhrzeit</th>
+                      <th className="py-4 px-6 text-left font-bold text-gray-800">Typ</th>
+                      <th className="py-4 px-6 text-left font-bold text-gray-800">Aktion</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {events.map((event, index) => (
+                      <tr key={index} className="border-t border-gray-200 hover:bg-gray-50 transition-colors">
+                        <td className="py-4 px-6 font-medium text-gray-800">{event.title}</td>
+                        <td className="py-4 px-6 text-gray-700">{event.date}</td>
+                        <td className="py-4 px-6 text-gray-700">{event.time}</td>
+                        <td className="py-4 px-6">
+                          <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                            {event.type}
+                          </span>
+                        </td>
+                        <td className="py-4 px-6">
+                          <button className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-600 transition-colors">
+                            Buchen
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section className="py-16 px-6 bg-white bg-opacity-40">
+            <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+              <div className="fade-element">
+                <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-800">Über uns</h2>
+                <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                  Unsere Vision ist es, Energetikern eine einzigartige Plattform zu bieten, auf der sie ihre Arbeit in einer immersiven, virtuellen Umgebung entfalten können. 
+                  Wir glauben an die Kraft der Energiearbeit – unabhängig vom physischen Standort.
+                </p>
+                <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                  Warum virtuelle Räume? Weil sie Barrieren abbauen, Reichweite schaffen und eine neue Dimension der energetischen Begegnung ermöglichen – jederzeit, überall.
+                </p>
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  Gegründet aus der Überzeugung, dass spirituelle Arbeit in die digitale Welt gehört – respektvoll, ästhetisch und wirkungsvoll.
+                </p>
+              </div>
+              <div className="fade-element">
+                <div className="bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-300">
+                  <img 
+                    src="https://images.unsplash.com/photo-1594736798357-8ec5ad490f7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                    alt="Gründer" 
+                    className="w-full h-auto"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="py-16 px-6 max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-12">
+              <div className="fade-element">
+                <h2 className="text-3xl font-bold mb-6 text-gray-800">Kontakt</h2>
+                <form className="space-y-6">
+                  <div>
+                    <label className="block text-gray-700 font-medium mb-2">Name</label>
+                    <input 
+                      type="text" 
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      placeholder="Dein Name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-700 font-medium mb-2">E-Mail</label>
+                    <input 
+                      type="email" 
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      placeholder="Deine E-Mail"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-700 font-medium mb-2">Nachricht</label>
+                    <textarea 
+                      rows="5"
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      placeholder="Deine Nachricht"
+                    ></textarea>
+                  </div>
+                  <button 
+                    type="submit"
+                    className="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-green-600 hover:to-blue-700 transition-all duration-300"
+                  >
+                    Nachricht senden
+                  </button>
+                </form>
+              </div>
+
+              <div className="fade-element">
+                <h2 className="text-3xl font-bold mb-6 text-gray-800">Login</h2>
+                <div className="bg-white rounded-2xl p-8 shadow-xl">
+                  <form className="space-y-6">
                     <div>
                       <label className="block text-gray-700 font-medium mb-2">E-Mail</label>
                       <input 
@@ -450,98 +470,66 @@
                       />
                     </div>
                     <div>
-                      <label className="block text-gray-700 font-medium mb-2">Nachricht</label>
-                      <textarea 
-                        rows="5"
+                      <label className="block text-gray-700 font-medium mb-2">Passwort</label>
+                      <input 
+                        type="password" 
                         className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        placeholder="Deine Nachricht"
-                      ></textarea>
+                        placeholder="Dein Passwort"
+                      />
                     </div>
                     <button 
                       type="submit"
-                      className="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-green-600 hover:to-blue-700 transition-all duration-300"
+                      className="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all duration-300"
                     >
-                      Nachricht senden
+                      Einloggen
                     </button>
                   </form>
+                  <p className="text-center text-gray-600 mt-4 text-sm">
+                    Landbesitzer haben Zugriff auf ihre virtuellen Räume und Buchungsmanagement.
+                  </p>
                 </div>
-
-                <div className="fade-element">
-                  <h2 className="text-3xl font-bold mb-6 text-gray-800">Login</h2>
-                  <div className="bg-white rounded-2xl p-8 shadow-xl">
-                    <form className="space-y-6">
-                      <div>
-                        <label className="block text-gray-700 font-medium mb-2">E-Mail</label>
-                        <input 
-                          type="email" 
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                          placeholder="Deine E-Mail"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-gray-700 font-medium mb-2">Passwort</label>
-                        <input 
-                          type="password" 
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                          placeholder="Dein Passwort"
-                        />
-                      </div>
-                      <button 
-                        type="submit"
-                        className="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all duration-300"
-                      >
-                        Einloggen
-                      </button>
-                    </form>
-                    <p className="text-center text-gray-600 mt-4 text-sm">
-                      Landbesitzer haben Zugriff auf ihre virtuellen Räume und Buchungsmanagement.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </section>
-          </main>
-
-          <!-- Footer -->
-          <footer className="bg-gray-800 text-white py-12 px-6">
-            <div className="max-w-6xl mx-auto">
-              <div className="flex flex-col md:flex-row justify-between items-center">
-                <div className="mb-8 md:mb-0">
-                  <h3 className="text-2xl font-bold mb-2">Energetiker-Welt</h3>
-                  <p className="text-gray-300">Dein virtueller Raum für Heilung & Begegnung</p>
-                </div>
-                <div className="flex space-x-6">
-                  {["📘", "📸", "▶️", "💼"].map((icon, i) => (
-                    <a 
-                      key={i} 
-                      href="#" 
-                      className="text-gray-300 hover:text-white text-2xl transition-colors"
-                    >
-                      {icon}
-                    </a>
-                  ))}
-                </div>
-              </div>
-              <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
-                <p>&copy; 2024 Energetiker-Welt. Alle Rechte vorbehalten.</p>
-                <p className="mt-2">
-                  <span className="mx-2">•</span>
-                  <a href="#" className="hover:text-white transition-colors">Impressum</a>
-                  <span className="mx-2">•</span>
-                  <a href="#" className="hover:text-white transition-colors">Datenschutz</a>
-                  <span className="mx-2">•</span>
-                  <a href="#" className="hover:text-white transition-colors">AGB</a>
-                </p>
               </div>
             </div>
-          </footer>
-        </div>
-      );
-    };
+          </section>
+        </main>
 
-    // React-Rendering
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
-  </script>
-</body>
-</html>
+        <footer className="bg-gray-800 text-white py-12 px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <div className="mb-8 md:mb-0">
+                <h3 className="text-2xl font-bold mb-2">Energetiker-Welt</h3>
+                <p className="text-gray-300">Dein virtueller Raum für Heilung & Begegnung</p>
+              </div>
+              <div className="flex space-x-6">
+                {["📘", "📸", "▶️", "💼"].map((icon, i) => (
+                  <a 
+                    key={i} 
+                    href="#" 
+                    className="text-gray-300 hover:text-white text-2xl transition-colors"
+                  >
+                    {icon}
+                  </a>
+                ))}
+              </div>
+            </div>
+            <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
+              <p>&copy; 2024 Energetiker-Welt. Alle Rechte vorbehalten.</p>
+              <p className="mt-2">
+                <span className="mx-2">•</span>
+                <a href="#" className="hover:text-white transition-colors">Impressum</a>
+                <span className="mx-2">•</span>
+                <a href="#" className="hover:text-white transition-colors">Datenschutz</a>
+                <span className="mx-2">•</span>
+                <a href="#" className="hover:text-white transition-colors">AGB</a>
+              </p>
+            </div>
+          </div>
+        </footer>
+      </div>
+    );
+  };
+
+  // React-Rendering
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(<App />);
+</script>
