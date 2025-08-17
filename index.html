@@ -13,7 +13,7 @@
     body {
       margin: 0;
       font-family: 'Open Sans', sans-serif;
-      backgroundImage: "url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')"
+      background: linear-gradient(to bottom, #fef8f0, #f0f7ff);
     }
     h1, h2, h3, h4, h5, h6 {
       font-family: 'Lora', serif;
@@ -45,10 +45,10 @@
       });
 
       const parcels = [
-        { id: 1, type: "Wald", price: "49", size: "50x50", available: true, image: "https://placehold.co/300x200/228B22/FFFFFF?text=Waldparzelle" },
-        { id: 2, type: "Strand", price: "59", size: "60x40", available: true, image: "https://placehold.co/300x200/FFD700/000000?text=Strandparzelle" },
-        { id: 3, type: "Sternenhimmel", price: "69", size: "55x45", available: false, image: "https://placehold.co/300x200/4B0082/FFFFFF?text=Sternenparzelle" },
-        { id: 4, type: "Berg", price: "54", size: "50x50", available: true, image: "https://placehold.co/300x200/8B4513/FFFFFF?text=Bergparzelle" },
+        { id: 1, type: "Wald", price: "49", size: "50x50", available: true, image: "https://images.unsplash.com/photo-1447752814277-968806a01c79?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
+        { id: 2, type: "Strand", price: "59", size: "60x40", available: true, image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
+        { id: 3, type: "Sternenhimmel", price: "69", size: "55x45", available: false, image: "https://images.unsplash.com/photo-1536130710391-92f47f1a7edc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
+        { id: 4, type: "Berg", price: "54", size: "50x50", available: true, image: "https://images.unsplash.com/photo-1444892627154-2487e213e564?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
       ];
 
       const packages = [
@@ -57,7 +57,7 @@
           description: "Ruhige Atmosphäre mit sanften Klängen und Naturblick.",
           price: "99",
           type: "one-time",
-          image: "https://placehold.co/400x250/98FB98/000000?text=Meditationshaus",
+          image: "https://images.unsplash.com/photo-1583392645293-35be201eace2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
           icon: "🧘",
         },
         {
@@ -65,7 +65,7 @@
           description: "Entspannende Umgebung für Körperarbeit und Wellness.",
           price: "29",
           type: "monthly",
-          image: "https://placehold.co/400x250/F0E68C/000000?text=Massage-Lounge",
+          image: "https://images.unsplash.com/photo-1544148103-27249b4e0aaa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
           icon: "💆",
         },
         {
@@ -73,7 +73,7 @@
           description: "Sternenhimmel für kosmische Energiearbeit.",
           price: "129",
           type: "one-time",
-          image: "https://placehold.co/400x250/4169E1/FFFFFF?text=Astrologie-Observatorium",
+          image: "https://images.unsplash.com/photo-1585074360847-68b77a3cc9f2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
           icon: "🔭",
         },
       ];
@@ -127,11 +127,12 @@
 
       return (
         <div className="min-h-screen bg-gradient-to-b from-amber-50 via-green-50 to-blue-50 text-gray-800">
+          <!-- Header mit echtem Sonnenaufgangs-Bild -->
           <header className="relative h-96 md:h-[500px] overflow-hidden">
             <div 
               className="absolute inset-0 bg-cover bg-center bg-no-repeat"
               style={{
-                backgroundImage: "url('https://placehold.co/1920x1080/8FBC8F/FFFFFF?text=Weite+Landschaft+mit+Sonnenaufgang')"
+                backgroundImage: "url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')"
               }}
             ></div>
             <div className="absolute inset-0 bg-black bg-opacity-30"></div>
@@ -152,6 +153,7 @@
           </header>
 
           <main>
+            <!-- Willkommensbereich -->
             <section className="py-16 px-6 max-w-6xl mx-auto">
               <div className="bg-white bg-opacity-80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-green-100">
                 <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 text-gray-800">
@@ -163,13 +165,17 @@
               </div>
             </section>
 
+            <!-- Interaktive Karte -->
             <section id="map-section" className="py-16 px-6 bg-white bg-opacity-40">
               <div className="max-w-6xl mx-auto">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 fade-element">
+                <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 text-gray-800 fade-element">
                   Wähle dein Land
                 </h2>
-                <p className="text-center text-lg text-gray-700 mb-8 fade-element">
+                <p className="text-center text-lg text-gray-700 mb-4 fade-element">
                   Parzellen sind limitiert – sichere dir deinen Platz in der virtuellen Welt!
+                </p>
+                <p className="text-center text-lg text-blue-600 font-medium fade-element mb-8">
+                  ➡️ Klicke auf eine Parzelle, um mehr zu sehen
                 </p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
@@ -207,6 +213,7 @@
                   ))}
                 </div>
 
+                {/* Parzelle ausgewählt → Detailansicht */}
                 {selectedParcel && (
                   <div className="fade-element mt-8 bg-white rounded-2xl p-8 shadow-2xl border border-green-200 max-w-4xl mx-auto">
                     <div className="grid md:grid-cols-2 gap-8">
@@ -285,6 +292,7 @@
               </div>
             </section>
 
+            <!-- Themenhäuser -->
             <section className="py-16 px-6 max-w-6xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 fade-element">
                 Pakete & Themenhäuser
@@ -322,6 +330,7 @@
               </div>
             </section>
 
+            <!-- So funktioniert's -->
             <section className="py-16 px-6 bg-white bg-opacity-40">
               <div className="max-w-4xl mx-auto">
                 <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 fade-element">
@@ -349,6 +358,7 @@
               </div>
             </section>
 
+            <!-- Events -->
             <section className="py-16 px-6 max-w-6xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 fade-element">
                 Nächste Events
@@ -389,6 +399,7 @@
               </div>
             </section>
 
+            <!-- Über uns -->
             <section className="py-16 px-6 bg-white bg-opacity-40">
               <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
                 <div className="fade-element">
@@ -407,7 +418,7 @@
                 <div className="fade-element">
                   <div className="bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-300">
                     <img 
-                      src="https://placehold.co/500x600/FFFFFF/8B4513?text=Porträt" 
+                      src="https://images.unsplash.com/photo-1594736798357-8ec5ad490f7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
                       alt="Gründer" 
                       className="w-full h-auto"
                     />
@@ -416,6 +427,7 @@
               </div>
             </section>
 
+            <!-- Kontakt & Login -->
             <section className="py-16 px-6 max-w-4xl mx-auto">
               <div className="grid md:grid-cols-2 gap-12">
                 <div className="fade-element">
@@ -490,6 +502,7 @@
             </section>
           </main>
 
+          <!-- Footer -->
           <footer className="bg-gray-800 text-white py-12 px-6">
             <div className="max-w-6xl mx-auto">
               <div className="flex flex-col md:flex-row justify-between items-center">
@@ -526,6 +539,7 @@
       );
     };
 
+    // React-Rendering
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
   </script>
