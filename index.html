@@ -4,33 +4,42 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Energetiker-Welt</title>
+  <!-- Schriftarten -->
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Lora:wght@400;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  
+  <!-- React & Babel (vom CDN) -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Tailwind CSS über CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
     body {
       margin: 0;
       font-family: 'Open Sans', sans-serif;
       background: linear-gradient(to bottom, #fef8f0, #f0f7ff);
+      color: #333;
     }
     h1, h2, h3, h4, h5, h6 {
       font-family: 'Lora', serif;
-    }
-    .animate-fade-in {
-      opacity: 1;
-      transition: opacity 1s ease-out;
     }
     .fade-element {
       opacity: 0;
       transition: opacity 1s ease-out;
     }
+    .animate-fade-in {
+      opacity: 1;
+    }
   </style>
 </head>
 <body class="min-h-screen">
-  <div id="root"></div>
 
+  <!-- React wird hier eingefügt -->
+  <div id="root">Lädt...</div>
+
+  <!-- JSX-Code mit Babel -->
   <script type="text/babel">
     const { useState, useEffect } = React;
 
@@ -120,14 +129,15 @@
           { threshold: 0.1 }
         );
 
-        document.querySelectorAll(".fade-element").forEach((el) => observer.observe(el));
+        document.querySelectorAll(".fade-element").forEach((el) => {
+          observer.observe(el);
+        });
 
         return () => observer.disconnect();
       }, []);
 
       return (
         <div className="min-h-screen bg-gradient-to-b from-amber-50 via-green-50 to-blue-50 text-gray-800">
-          <!-- Header mit echtem Sonnenaufgangs-Bild -->
           <header className="relative h-96 md:h-[500px] overflow-hidden">
             <div 
               className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -153,9 +163,8 @@
           </header>
 
           <main>
-            <!-- Willkommensbereich -->
             <section className="py-16 px-6 max-w-6xl mx-auto">
-              <div className="bg-white bg-opacity-80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-green-100">
+              <div className="bg-white bg-opacity-80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-green-100 fade-element">
                 <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 text-gray-800">
                   Dein Platz im virtuellen Reich
                 </h2>
@@ -165,7 +174,6 @@
               </div>
             </section>
 
-            <!-- Interaktive Karte -->
             <section id="map-section" className="py-16 px-6 bg-white bg-opacity-40">
               <div className="max-w-6xl mx-auto">
                 <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 text-gray-800 fade-element">
@@ -184,364 +192,3 @@
                       key={parcel.id}
                       onClick={() => handleParcelClick(parcel)}
                       className={`fade-element cursor-pointer rounded-xl overflow-hidden shadow-lg transform hover:scale-105 transition-all duration-300 ${
-                        parcel.available ? "hover:shadow-2xl" : "opacity-60 cursor-not-allowed"
-                      }`}
-                    >
-                      <img 
-                        src={parcel.image} 
-                        alt={parcel.type} 
-                        className="w-full h-48 object-cover"
-                      />
-                      <div className="p-6 bg-white">
-                        <h3 className="text-xl font-bold text-gray-800 mb-2">{parcel.type}</h3>
-                        <p className="text-gray-600 mb-3">Größe: {parcel.size}</p>
-                        <p className="text-2xl font-bold text-green-600 mb-4">
-                          €{parcel.price}
-                        </p>
-                        <button 
-                          className={`w-full py-2 rounded-lg font-semibold transition-colors ${
-                            parcel.available 
-                              ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700" 
-                              : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                          }`}
-                          disabled={!parcel.available}
-                        >
-                          {parcel.available ? "Auswählen" : "Vergaben"}
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Parzelle ausgewählt → Detailansicht */}
-                {selectedParcel && (
-                  <div className="fade-element mt-8 bg-white rounded-2xl p-8 shadow-2xl border border-green-200 max-w-4xl mx-auto">
-                    <div className="grid md:grid-cols-2 gap-8">
-                      <div>
-                        <h3 className="text-2xl font-bold mb-4 text-gray-800">
-                          Parzelle: {selectedParcel.type}
-                        </h3>
-                        <img 
-                          src={selectedParcel.image} 
-                          alt={selectedParcel.type} 
-                          className="w-full h-48 object-cover rounded-lg mb-4"
-                        />
-                        <p className="text-gray-700 mb-2"><strong>Größe:</strong> {selectedParcel.size}</p>
-                        <p className="text-gray-700 mb-2"><strong>Preis:</strong> €{selectedParcel.price}</p>
-                        <p className="text-gray-700 mb-6">
-                          Ein idealer Ort für deine energetische Arbeit in der virtuellen Welt.
-                        </p>
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold mb-4 text-gray-800">Wähle dein Themenhaus</h4>
-                        <select 
-                          name="package"
-                          value={formData.package}
-                          onChange={handleInputChange}
-                          className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        >
-                          <option value="">Wähle ein Paket...</option>
-                          {packages.map((pkg) => (
-                            <option key={pkg.title} value={pkg.title}>
-                              {pkg.title} (€{pkg.price} {pkg.type === 'monthly' ? '/ Monat' : ''})
-                            </option>
-                          ))}
-                        </select>
-                        {!showBooking ? (
-                          <button 
-                            onClick={handleBookNow}
-                            className="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-green-600 hover:to-blue-700 transition-all duration-300"
-                          >
-                            Buchen & Bezahlen
-                          </button>
-                        ) : (
-                          <form onSubmit={handleSubmitBooking} className="space-y-4">
-                            <input 
-                              type="text"
-                              name="name"
-                              placeholder="Dein Name"
-                              value={formData.name}
-                              onChange={handleInputChange}
-                              required
-                              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-                            />
-                            <input 
-                              type="email"
-                              name="email"
-                              placeholder="Deine E-Mail"
-                              value={formData.email}
-                              onChange={handleInputChange}
-                              required
-                              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-                            />
-                            <p className="text-sm text-gray-600">
-                              Wir senden dir ein Zahlungslink per E-Mail (Stripe/PayPal).
-                            </p>
-                            <button 
-                              type="submit"
-                              className="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-green-600 hover:to-blue-700 transition-all duration-300"
-                            >
-                              Buchung bestätigen
-                            </button>
-                          </form>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </section>
-
-            <!-- Themenhäuser -->
-            <section className="py-16 px-6 max-w-6xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 fade-element">
-                Pakete & Themenhäuser
-              </h2>
-              <div className="grid md:grid-cols-3 gap-8">
-                {packages.map((pkg, index) => (
-                  <div 
-                    key={index}
-                    className="fade-element bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
-                  >
-                    <div className="relative">
-                      <img 
-                        src={pkg.image} 
-                        alt={pkg.title} 
-                        className="w-full h-48 object-cover"
-                      />
-                      <div className="absolute top-4 right-4 bg-white bg-opacity-90 rounded-full w-12 h-12 flex items-center justify-center text-2xl">
-                        {pkg.icon}
-                      </div>
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold text-gray-800 mb-3">{pkg.title}</h3>
-                      <p className="text-gray-700 mb-4 leading-relaxed">{pkg.description}</p>
-                      <div className="flex justify-between items-center">
-                        <span className="text-2xl font-bold text-green-600">
-                          €{pkg.price}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {pkg.type === 'monthly' ? '/ Monat' : 'einmalig'}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <!-- So funktioniert's -->
-            <section className="py-16 px-6 bg-white bg-opacity-40">
-              <div className="max-w-4xl mx-auto">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 fade-element">
-                  So funktioniert's
-                </h2>
-                <div className="grid md:grid-cols-3 gap-8">
-                  {[
-                    { step: 1, title: "Land auswählen", desc: "Wähle deine Parzelle auf der interaktiven Karte – Wald, Strand oder Sternenhimmel.", icon: "🗺️" },
-                    { step: 2, title: "Haus-Paket wählen", desc: "Entscheide dich für ein Themenhaus oder gestalte deinen Raum individuell.", icon: "🏠" },
-                    { step: 3, title: "Kunden empfangen", desc: "Biete Sitzungen an und empfange deine Klienten in deinem virtuellen Energetiker-Raum.", icon: "👥" }
-                  ].map((item) => (
-                    <div 
-                      key={item.step}
-                      className="fade-element text-center bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300"
-                    >
-                      <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                        {item.step}
-                      </div>
-                      <div className="text-4xl mb-4">{item.icon}</div>
-                      <h3 className="text-xl font-bold text-gray-800 mb-3">{item.title}</h3>
-                      <p className="text-gray-700">{item.desc}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            <!-- Events -->
-            <section className="py-16 px-6 max-w-6xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 fade-element">
-                Nächste Events
-              </h2>
-              <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="bg-gradient-to-r from-green-100 to-blue-100">
-                        <th className="py-4 px-6 text-left font-bold text-gray-800">Veranstaltung</th>
-                        <th className="py-4 px-6 text-left font-bold text-gray-800">Datum</th>
-                        <th className="py-4 px-6 text-left font-bold text-gray-800">Uhrzeit</th>
-                        <th className="py-4 px-6 text-left font-bold text-gray-800">Typ</th>
-                        <th className="py-4 px-6 text-left font-bold text-gray-800">Aktion</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {events.map((event, index) => (
-                        <tr key={index} className="border-t border-gray-200 hover:bg-gray-50 transition-colors">
-                          <td className="py-4 px-6 font-medium text-gray-800">{event.title}</td>
-                          <td className="py-4 px-6 text-gray-700">{event.date}</td>
-                          <td className="py-4 px-6 text-gray-700">{event.time}</td>
-                          <td className="py-4 px-6">
-                            <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                              {event.type}
-                            </span>
-                          </td>
-                          <td className="py-4 px-6">
-                            <button className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-600 transition-colors">
-                              Buchen
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </section>
-
-            <!-- Über uns -->
-            <section className="py-16 px-6 bg-white bg-opacity-40">
-              <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-                <div className="fade-element">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-800">Über uns</h2>
-                  <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                    Unsere Vision ist es, Energetikern eine einzigartige Plattform zu bieten, auf der sie ihre Arbeit in einer immersiven, virtuellen Umgebung entfalten können. 
-                    Wir glauben an die Kraft der Energiearbeit – unabhängig vom physischen Standort.
-                  </p>
-                  <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                    Warum virtuelle Räume? Weil sie Barrieren abbauen, Reichweite schaffen und eine neue Dimension der energetischen Begegnung ermöglichen – jederzeit, überall.
-                  </p>
-                  <p className="text-lg text-gray-700 leading-relaxed">
-                    Gegründet aus der Überzeugung, dass spirituelle Arbeit in die digitale Welt gehört – respektvoll, ästhetisch und wirkungsvoll.
-                  </p>
-                </div>
-                <div className="fade-element">
-                  <div className="bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-300">
-                    <img 
-                      src="https://images.unsplash.com/photo-1594736798357-8ec5ad490f7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
-                      alt="Gründer" 
-                      className="w-full h-auto"
-                    />
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <!-- Kontakt & Login -->
-            <section className="py-16 px-6 max-w-4xl mx-auto">
-              <div className="grid md:grid-cols-2 gap-12">
-                <div className="fade-element">
-                  <h2 className="text-3xl font-bold mb-6 text-gray-800">Kontakt</h2>
-                  <form className="space-y-6">
-                    <div>
-                      <label className="block text-gray-700 font-medium mb-2">Name</label>
-                      <input 
-                        type="text" 
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        placeholder="Dein Name"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gray-700 font-medium mb-2">E-Mail</label>
-                      <input 
-                        type="email" 
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        placeholder="Deine E-Mail"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gray-700 font-medium mb-2">Nachricht</label>
-                      <textarea 
-                        rows="5"
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        placeholder="Deine Nachricht"
-                      ></textarea>
-                    </div>
-                    <button 
-                      type="submit"
-                      className="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-green-600 hover:to-blue-700 transition-all duration-300"
-                    >
-                      Nachricht senden
-                    </button>
-                  </form>
-                </div>
-
-                <div className="fade-element">
-                  <h2 className="text-3xl font-bold mb-6 text-gray-800">Login</h2>
-                  <div className="bg-white rounded-2xl p-8 shadow-xl">
-                    <form className="space-y-6">
-                      <div>
-                        <label className="block text-gray-700 font-medium mb-2">E-Mail</label>
-                        <input 
-                          type="email" 
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                          placeholder="Deine E-Mail"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-gray-700 font-medium mb-2">Passwort</label>
-                        <input 
-                          type="password" 
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                          placeholder="Dein Passwort"
-                        />
-                      </div>
-                      <button 
-                        type="submit"
-                        className="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all duration-300"
-                      >
-                        Einloggen
-                      </button>
-                    </form>
-                    <p className="text-center text-gray-600 mt-4 text-sm">
-                      Landbesitzer haben Zugriff auf ihre virtuellen Räume und Buchungsmanagement.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </section>
-          </main>
-
-          <!-- Footer -->
-          <footer className="bg-gray-800 text-white py-12 px-6">
-            <div className="max-w-6xl mx-auto">
-              <div className="flex flex-col md:flex-row justify-between items-center">
-                <div className="mb-8 md:mb-0">
-                  <h3 className="text-2xl font-bold mb-2">Energetiker-Welt</h3>
-                  <p className="text-gray-300">Dein virtueller Raum für Heilung & Begegnung</p>
-                </div>
-                <div className="flex space-x-6">
-                  {["📘", "📸", "▶️", "💼"].map((icon, i) => (
-                    <a 
-                      key={i} 
-                      href="#" 
-                      className="text-gray-300 hover:text-white text-2xl transition-colors"
-                    >
-                      {icon}
-                    </a>
-                  ))}
-                </div>
-              </div>
-              <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
-                <p>&copy; 2024 Energetiker-Welt. Alle Rechte vorbehalten.</p>
-                <p className="mt-2">
-                  <span className="mx-2">•</span>
-                  <a href="#" className="hover:text-white transition-colors">Impressum</a>
-                  <span className="mx-2">•</span>
-                  <a href="#" className="hover:text-white transition-colors">Datenschutz</a>
-                  <span className="mx-2">•</span>
-                  <a href="#" className="hover:text-white transition-colors">AGB</a>
-                </p>
-              </div>
-            </div>
-          </footer>
-        </div>
-      );
-    };
-
-    // React-Rendering
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
-  </script>
-</body>
-</html>
